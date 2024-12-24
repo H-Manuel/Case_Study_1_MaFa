@@ -32,13 +32,11 @@ def run():
 
     st.write("## Geräteauswahl")
 
-    # Geräteliste aus Session-State verwenden
-    #device_list = st.session_state.device_list
 
     # Dropdown
     st.session_state.sb_current_device = st.selectbox(
         label="Gerät auswählen",
-        options=st.session_state.device_list,######
+        options=st.session_state.device_list,
     )
 
     # Zeige das aktuelle Gerät an
@@ -84,6 +82,7 @@ def run():
         with col2:
             if st.button("Abbrechen"):
                 st.session_state["edit_popup"] = False
+                st.rerun()
 
     if st.session_state.get("delete_popup", False):
         st.write("### Sind Sie sicher?")
@@ -117,6 +116,7 @@ def run():
         with right:
             if st.button("Abbrechen"):
                 st.session_state["delete_popup"] = False
+                st.rerun()
 
     if st.session_state.get("add_device_popup", False):
         st.write("### Neues Gerät hinzufügen")
