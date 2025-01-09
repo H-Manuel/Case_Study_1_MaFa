@@ -1,5 +1,7 @@
 import streamlit as st
+import pandas as pd
 from devices import Device  # Importiere die Devices-Klasse
+from users import User
 
 def run():
     # Initialisierung
@@ -10,7 +12,11 @@ def run():
             device.device_name: device.managed_by_user_id for device in devices
         }
         st.session_state.device_list.append("Neues Gerät hinzufügen...")
-
+    if "user_data" not in st.session_state:
+        # Lade alle Nutzer aus der Datenbank
+        all_users = User.find_all(User)
+        user_data = [{ "Email": user.id, "Name": user.name} for user in all_users]
+        st.session_state.user_data = pd.DataFrame(user_data)
     # UI-Logik
     st.write("# Gerätemanagement")
     st.write("## Geräteauswahl")
@@ -29,25 +35,32 @@ def run():
         st.write(
             f"Das ausgewählte Gerät ist: {st.session_state.sb_current_device} mit dem Verantwortlichen: {current_supervisor}"
         )
-
+        
         col1, col2 = st.columns(2)
         with col1:
             if st.button("Bearbeiten"):
-                new_supervisor = st.text_input(
-                    "Neuer Verantwortlicher:", current_supervisor
+                st.session_state["edit"]=True
+
+            if st.session_state.get("edit", False):
+                new_supervisor = st.selectbox(
+                    "Neuer Verantwortlicher:", options=st.session_state.user_data,key="new_supervisor"
                 )
                 if st.button("Speichern"):
                     device = Device.find_by_attribute(
                         "device_name", st.session_state.sb_current_device
                     )
                     if device:
-                        device.set_managed_by_user_id(new_supervisor)
+                        device.set_managed_by_user_id(st.session_state.new_supervisor)
                         device.store_data()
                         st.session_state.supervisor_dict[
                             st.session_state.sb_current_device
                         ] = new_supervisor
                         st.success("Verantwortlicher wurde aktualisiert.")
+                        st.session_state["edit"]=False
                         st.rerun()
+                if st.button("abbrechen"):
+                    st.session_state["edit"]=False
+                    st.rerun()
 
         with col2:
             if st.button("Löschen"):
