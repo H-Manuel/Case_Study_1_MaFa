@@ -1,33 +1,28 @@
 import streamlit as st
 import pandas as pd
+from users import User
 
 def run():
-    # Initialisiere Benutzerdaten in Session State
     if "user_data" not in st.session_state:
-        st.session_state.user_data = pd.DataFrame(
-            {"Name": ["Max Mustermann", "Erika Musterfrau"], "Email": ["mm0000@mci4me.at", "me0001@mci4me.at"]}
-        )
+        all_users = User.find_all(User)
+        user_data = [{ "Email": user.id, "Name": user.name} for user in all_users]
+        st.session_state.user_data = pd.DataFrame(user_data)
 
-    # Initialisiere Steuerung für Popups
     if "add_user_popup" not in st.session_state:
         st.session_state["add_user_popup"] = False
     if "delete_user_popup" not in st.session_state:
         st.session_state["delete_user_popup"] = False
 
-    # Stelle sicher, dass nur ein Popup aktiv ist
     if st.session_state["add_user_popup"]:
         st.session_state["delete_user_popup"] = False
     if st.session_state["delete_user_popup"]:
         st.session_state["add_user_popup"] = False
 
-    # Titel
     st.write("# Nutzerverwaltung")
 
-    # Aktuelle Nutzer anzeigen
     st.write("## Aktuelle Nutzer")
     st.dataframe(st.session_state.user_data)
 
-    # Buttons für Hinzufügen und Löschen
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Nutzer hinzufügen"):
@@ -36,7 +31,6 @@ def run():
         if st.button("Nutzer löschen"):
             st.session_state["delete_user_popup"] = True
 
-    # Popup: Nutzer hinzufügen
     if st.session_state.get("add_user_popup", False):
         with st.form("add_user_form"):
             new_name = st.text_input("Name des neuen Nutzers:")
@@ -50,6 +44,9 @@ def run():
             if submit:
                 if new_name and new_email:
                     if new_email not in st.session_state.user_data["Email"].values:
+                        new_user = User(new_email, new_name)
+                        new_user.store_data()
+                        
                         new_entry = {"Name": new_name, "Email": new_email}
                         st.session_state.user_data = pd.concat(
                             [st.session_state.user_data, pd.DataFrame([new_entry])], ignore_index=True
@@ -65,7 +62,6 @@ def run():
                 st.session_state["add_user_popup"] = False
                 st.rerun()
 
-    # Popup: Nutzer löschen
     if st.session_state.get("delete_user_popup", False):
         if not st.session_state.user_data.empty:
             user_to_delete = st.selectbox(
@@ -73,7 +69,12 @@ def run():
             )
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("Löschen"):
+                if st.button("Löschen", key="delete_user_submit"):
+                    email_to_delete = user_to_delete.split(" (")[-1][:-1] 
+                    user = User.find_by_attribute("id", email_to_delete)
+                    if user:
+                        user.delete()
+                    
                     selected_index = st.session_state.user_data[
                         st.session_state.user_data.apply(
                             lambda row: f"{row['Name']} ({row['Email']})", axis=1
@@ -84,7 +85,7 @@ def run():
                     st.session_state["delete_user_popup"] = False
                     st.rerun()
             with col2:
-                if st.button("Abbrechen"):
+                if st.button("Abbrechen", key="delete_user_cancel"):
                     st.session_state["delete_user_popup"] = False
                     st.rerun()
         else:
