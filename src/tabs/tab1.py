@@ -1,10 +1,9 @@
 import streamlit as st
 import pandas as pd
-from devices import Device  # Importiere die Devices-Klasse
+from devices import Device
 from users import User
 
 def run():
-    # Initialisierung
     if "device_list" not in st.session_state:
         devices = Device.find_all()
         st.session_state.device_list = [device.device_name for device in devices]
@@ -13,11 +12,13 @@ def run():
         }
         st.session_state.device_list.append("Neues Gerät hinzufügen...")
     if "user_data" not in st.session_state:
-        # Lade alle Nutzer aus der Datenbank
+        # Lade Nutzer
         all_users = User.find_all(User)
         user_data = [{ "Email": user.id, "Name": user.name} for user in all_users]
         st.session_state.user_data = pd.DataFrame(user_data)
-    # UI-Logik
+
+#UI 
+
     st.write("# Gerätemanagement")
     st.write("## Geräteauswahl")
 
