@@ -6,9 +6,9 @@ from serializer import serializer
 
 class User:
     # Class variable that is shared between all instances of the class
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('users')
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(_file_)), 'database.json'), storage=serializer).table('users')
     
-    def __init__(self, id, name) -> None:
+    def _init_(self, id, name) -> None:
         """Create a new user based on the given name and id"""
         self.name = name
         self.id = id
@@ -21,11 +21,11 @@ class User:
         result = self.db_connector.search(UserQuery.name == self.name)
         if result:
             # Update the existing record with the current instance's data
-            result = self.db_connector.update(self.__dict__, doc_ids=[result[0].doc_id])
+            result = self.db_connector.update(self._dict_, doc_ids=[result[0].doc_id])
             print("Data updated.")
         else:
             # If the device doesn't exist, insert a new record
-            self.db_connector.insert(self.__dict__)
+            self.db_connector.insert(self._dict_)
             print("Data inserted.")
 
     def delete(self) -> None:
@@ -41,13 +41,13 @@ class User:
         else:
             print("Data not found.")
     
-    def __str__(self):
+    def _str_(self):
         return f"User {self.id} - {self.name}"
     
-    def __repr__(self):
-        return self.__str__()
+    def _repr_(self):
+        return self._str_()
     
-    @staticmethod
+    @classmethod
     def find_all(cls) -> list:
         """Find all users in the database"""
          # Load all data from the database and create instances of the Device class
@@ -65,7 +65,7 @@ class User:
 
         if result:
             data = result[:num_to_return]
-            user_results = [cls(d['name'], d['id']) for d in data]
+            user_results = [cls(d['id'], d['name']) for d in data]
             return user_results if num_to_return > 1 else user_results[0]
         else:
             return None
