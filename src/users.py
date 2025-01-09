@@ -6,9 +6,9 @@ from serializer import serializer
 
 class User:
     # Class variable that is shared between all instances of the class
-    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(_file_)), 'database.json'), storage=serializer).table('users')
+    db_connector = TinyDB(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json'), storage=serializer).table('users')
     
-    def _init_(self, id, name) -> None:
+    def __init__(self, id, name) -> None:
         """Create a new user based on the given name and id"""
         self.name = name
         self.id = id
@@ -21,11 +21,11 @@ class User:
         result = self.db_connector.search(UserQuery.name == self.name)
         if result:
             # Update the existing record with the current instance's data
-            result = self.db_connector.update(self._dict_, doc_ids=[result[0].doc_id])
+            result = self.db_connector.update(self.__dict__, doc_ids=[result[0].doc_id])
             print("Data updated.")
         else:
             # If the device doesn't exist, insert a new record
-            self.db_connector.insert(self._dict_)
+            self.db_connector.insert(self.__dict__)
             print("Data inserted.")
 
     def delete(self) -> None:
@@ -45,7 +45,7 @@ class User:
         return f"User {self.id} - {self.name}"
     
     def _repr_(self):
-        return self._str_()
+        return self.__str__()
     
     @classmethod
     def find_all(cls) -> list:
