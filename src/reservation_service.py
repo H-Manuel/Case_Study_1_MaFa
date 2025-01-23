@@ -1,3 +1,4 @@
+from datetime import datetime
 from reservations import Reservation
 from devices_inheritance import Device
 from users_inheritance import User
@@ -26,7 +27,7 @@ class ReservationService():
         return [reservation for reservation in cls.reservations if reservation.device_id == device_id and reservation.user_id == user_id]
 
     @classmethod
-    def check_conflict(cls, device_id: str, start_date: str, end_date: str) -> bool:
+    def check_conflict(cls, device_id: str, start_date: datetime, end_date: datetime) -> bool:
         for reservation in cls.reservations:
             if reservation.device_id == device_id:
                 if (start_date >= reservation.start_date and start_date <= reservation.end_date) or (end_date >= reservation.start_date and end_date <= reservation.end_date):
