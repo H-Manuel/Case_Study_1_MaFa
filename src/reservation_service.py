@@ -2,6 +2,7 @@ from datetime import datetime
 from reservations import Reservation
 from devices_inheritance import Device
 from users_inheritance import User
+from maintenance_service import MaintenanceService
 
 
 class ReservationService():
@@ -31,6 +32,12 @@ class ReservationService():
         for reservation in cls.reservations:
             if reservation.device_id == device_id:
                 if (start_date >= reservation.start_date and start_date <= reservation.end_date) or (end_date >= reservation.start_date and end_date <= reservation.end_date):
+                    return True
+        #MaintenanceService.find_all_maintenances()
+        maintanences=MaintenanceService.find_all_maintenances_by_device_id(device_id)
+        for maintenance in maintanences:
+            if maintenance.device_id == device_id:
+                if (start_date >= maintenance.start_date and start_date <= maintenance.end_date) or (end_date >= maintenance.start_date and end_date <= maintenance.end_date):
                     return True
         return False
 
@@ -65,4 +72,4 @@ if __name__ == "__main__":
     print(reservation_service.find_all_reservations())
     #print(reservation_service.create_reservation("2", "Device2", "2021-01-01 00:00:00", "2021-01-02 00:00:00"))
     #print(reservation_service.create_reservation("one@mci.edu", "Device2", "2021-01-01 00:00:00", "2021-01-02 00:00:00"))
-    print(reservation_service.create_reservation("one@mci.edu", "Device2", "2021-02-01 00:00:00", "2021-02-02 00:00:00"))
+    print(reservation_service.create_reservation("one@mci.edu", "Device2", "2025-01-02 00:00:00", "2025-01-06 00:00:00"))

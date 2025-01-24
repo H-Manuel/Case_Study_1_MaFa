@@ -34,9 +34,8 @@ def run():
         st.session_state["reservierung_loeschen_popup"] = False
 
     # Initialisiere Geräte-Liste in Session State
-    if "device_list" not in st.session_state:
-        devices = Device.find_all()
-        st.session_state.device_list = [device.id for device in devices]
+    devices = Device.find_all()
+    st.session_state.device_list = [device.id for device in devices]
 
     # Überschrift
     st.write("# Reservierungssystem")
@@ -70,7 +69,7 @@ def run():
             startzeit = datetime.combine(datum[0], start_time)
             endzeit = datetime.combine(datum[1], end_time)
             geraet = st.selectbox(
-                label="Gerät auswählen", options=st.session_state.device_list[:-1]
+                label="Gerät auswählen", options=st.session_state.device_list
             )
             links, rechts = st.columns(2)
             with links:
