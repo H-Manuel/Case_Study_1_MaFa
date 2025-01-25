@@ -16,14 +16,14 @@ class Maintenance(Serializable):
         self.device_id = device_id
         self.start_date = start_date
         self.end_date = end_date
-        self.interval_months = str(interval_months)
+        self.interval_months = interval_months
         
     @classmethod
     def instantiate_from_dict(cls, data: dict) -> Self:
-        return cls(data['device_id'], data['start_date'], data['end_date'], data['creation_date'], data['last_update'], data['id'])
+        return cls(data['device_id'], data['start_date'], data['end_date'], data['interval_months'], data['creation_date'], data['last_update'], data['id'])
 
     def __str__(self):
-        return f"Maintenance: for {self.device_id}: {self.start_date} - {self.end_date}"
+        return f"Maintenance: for {self.device_id}: {self.start_date} - {self.end_date} -interval_months: {self.interval_months}" 
 
 if __name__ == "__main__":
     # Create a device

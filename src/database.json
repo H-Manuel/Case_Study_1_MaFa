@@ -92,48 +92,30 @@
     "maintenance": {
         "1": {
             "id": "Device1_Wartung_2025-06-06 00:00:00_2025-06-07 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-24T22:53:01.413328",
-            "last_update": "{TinyDateTime}:2025-01-24T22:53:01.413342",
+            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.136935",
+            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.136955",
             "device_id": "Device1",
             "start_date": "2025-06-06 00:00:00",
             "end_date": "2025-06-07 00:00:00",
-            "interval_months": "1"
+            "interval_months": 1
         },
         "2": {
             "id": "Device2_Wartung_2025-01-01 00:00:00_2025-01-02 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-24T22:53:01.422599",
-            "last_update": "{TinyDateTime}:2025-01-24T22:53:01.422601",
+            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.176292",
+            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.176295",
             "device_id": "Device2",
             "start_date": "2025-01-01 00:00:00",
             "end_date": "2025-01-02 00:00:00",
-            "interval_months": "6"
+            "interval_months": 6
         },
         "3": {
-            "id": "Device2_Wartung_2025-01-02 00:00:00_2025-01-04 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-24T22:53:01.426213",
-            "last_update": "{TinyDateTime}:2025-01-24T22:53:01.426214",
-            "device_id": "Device2",
-            "start_date": "2025-01-02 00:00:00",
-            "end_date": "2025-01-04 00:00:00",
-            "interval_months": "6"
-        },
-        "4": {
             "id": "Device2_Wartung_2025-07-01 00:00:00_2025-07-02 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-24T22:53:01.431772",
-            "last_update": "{TinyDateTime}:2025-01-24T22:53:01.431772",
+            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.191127",
+            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.191128",
             "device_id": "Device2",
             "start_date": "{TinyDateTime}:2025-07-01T00:00:00",
             "end_date": "{TinyDateTime}:2025-07-02T00:00:00",
-            "interval_months": "2025-01-24 22:53:01.422599"
-        },
-        "5": {
-            "id": "Device2_Wartung_2025-07-02 00:00:00_2025-07-04 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-24T22:53:01.434745",
-            "last_update": "{TinyDateTime}:2025-01-24T22:53:01.434746",
-            "device_id": "Device2",
-            "start_date": "{TinyDateTime}:2025-07-02T00:00:00",
-            "end_date": "{TinyDateTime}:2025-07-04T00:00:00",
-            "interval_months": "2025-01-24 22:53:01.426213"
+            "interval_months": 6
         }
     }
 }
