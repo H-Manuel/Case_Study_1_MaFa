@@ -23,11 +23,11 @@ class MaintenanceService():
         return Device.find_by_attribute("id", device_id) is not None
     
     @classmethod
-    def create_new_maintenance(cls, device_id: str, start_date: datetime, end_date: datetime,interval_months: int) -> bool:
+    def create_new_maintenance(cls, device_id: str, start_date: datetime, end_date: datetime,interval_months: int, cost: int, description: str) -> bool:
         if not cls.device_exists(device_id):
             raise ValueError("Device does not exist")
         
-        maintenance = Maintenance(device_id, start_date, end_date, interval_months=interval_months)
+        maintenance = Maintenance(device_id, start_date, end_date, interval_months=interval_months, cost=cost, description=description)
         maintenance.store_data()
         cls.find_all_maintenances()
         return True
@@ -55,7 +55,9 @@ class MaintenanceService():
                     maintenance.device_id,
                     new_start_date,
                     new_end_date,
-                    interval
+                    interval,
+                    maintenance.cost,
+                    maintenance.description
                     )
                     new_maintenance.store_data()
                     break   
@@ -65,8 +67,8 @@ class MaintenanceService():
 
 if __name__== "__main__":
     print("running")
-    maintenance1 = MaintenanceService.create_new_maintenance("Device1", "2025-06-06 00:00:00", "2025-06-07 00:00:00", 1)
-    maintenance2 = MaintenanceService.create_new_maintenance("Device2", "2025-01-01 00:00:00", "2025-01-02 00:00:00", 6)
+    maintenance1 = MaintenanceService.create_new_maintenance("Device1", "2025-06-06 00:00:00", "2025-06-07 00:00:00", 1,100,"Description1")
+    maintenance2 = MaintenanceService.create_new_maintenance("Device2", "2025-01-01 00:00:00", "2025-01-02 00:00:00", 6,200,"Description2")
 
     MaintenanceService.update_all_maintenances()
     loaded_maintenances = MaintenanceService.find_all_maintenances_by_device_id("Device2")

@@ -92,30 +92,36 @@
     "maintenance": {
         "1": {
             "id": "Device1_Wartung_2025-06-06 00:00:00_2025-06-07 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.136935",
-            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.136955",
+            "creation_date": "{TinyDateTime}:2025-01-26T17:23:41.190598",
+            "last_update": "{TinyDateTime}:2025-01-26T17:23:41.190609",
             "device_id": "Device1",
             "start_date": "2025-06-06 00:00:00",
             "end_date": "2025-06-07 00:00:00",
-            "interval_months": 1
+            "interval_months": 1,
+            "cost": 100,
+            "description": "Description1"
         },
         "2": {
             "id": "Device2_Wartung_2025-01-01 00:00:00_2025-01-02 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.176292",
-            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.176295",
+            "creation_date": "{TinyDateTime}:2025-01-26T17:23:41.194210",
+            "last_update": "{TinyDateTime}:2025-01-26T17:23:41.194211",
             "device_id": "Device2",
             "start_date": "2025-01-01 00:00:00",
             "end_date": "2025-01-02 00:00:00",
-            "interval_months": 6
+            "interval_months": 6,
+            "cost": 200,
+            "description": "Description2"
         },
         "3": {
             "id": "Device2_Wartung_2025-07-01 00:00:00_2025-07-02 00:00:00",
-            "creation_date": "{TinyDateTime}:2025-01-25T21:56:04.191127",
-            "last_update": "{TinyDateTime}:2025-01-25T21:56:04.191128",
+            "creation_date": "{TinyDateTime}:2025-01-26T17:23:41.197383",
+            "last_update": "{TinyDateTime}:2025-01-26T17:23:41.197384",
             "device_id": "Device2",
             "start_date": "{TinyDateTime}:2025-07-01T00:00:00",
             "end_date": "{TinyDateTime}:2025-07-02T00:00:00",
-            "interval_months": 6
+            "interval_months": 6,
+            "cost": 200,
+            "description": "Description2"
         }
     }
 }
