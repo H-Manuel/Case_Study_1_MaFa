@@ -1,14 +1,14 @@
-import os, sys
-sys.path.append(os.path.dirname(__file__) + "/../")
-
+import os
+import sys
+from datetime import date, datetime
 import streamlit as st
 import pandas as pd
-from datetime import date
 from reservation_service import ReservationService
 from users_inheritance import User
 from serializable import Serializable
 from tinydb import TinyDB
-from devices_inheritance import Device  
+from devices_inheritance import Device
+from maintenance_service import MaintenanceService
 
 # Initialize the database connector
 Serializable.db_connector = TinyDB('c:/Schule_24-25/Python_Schule/Case_Study/Case_Study_1_MaFa/src/database.json')
@@ -16,20 +16,27 @@ Serializable.db_connector = TinyDB('c:/Schule_24-25/Python_Schule/Case_Study/Cas
 def run():
     reservation_service = ReservationService()
 
-    # Fetch users from the database using User.find_all()
+    # Fetch users and devices from the database
     users = User.find_all()
     user_names = [user.id for user in users]
     devices = Device.find_all()
     st.session_state.device_list = [device.id for device in devices]
 
+    # Initialize MaintenanceService
+    maintenance_service = MaintenanceService()
+
     if "maintenance_data" not in st.session_state:
+        maintenances = maintenance_service.find_all_maintenances()
         st.session_state.maintenance_data = pd.DataFrame(
-            {
-                "Gerät": ["Laptop", "Beamer"], #device list hier eintragen
-                "Datum": ["2024-01-15", "2024-01-20"],  #datum aus datenbank
-                "Kosten (€)": [120.50, 80.00],  #kosten aus datenbank
-                "Beschreibung": ["Reparatur Tastatur", "Lampenwechsel"],    #beschreibung aus datenbank
-            }
+            [
+                {
+                    "Gerät": maintenance.device_id,
+                    "Datum": maintenance.end_date,
+                    "Kosten (€)": getattr(maintenance, "cost", 0),
+                    "Beschreibung": getattr(maintenance, "description", "N/A"),
+                }
+                for maintenance in maintenances
+            ]
         )
 
     if "add_maintenance_popup" not in st.session_state:
@@ -53,36 +60,36 @@ def run():
     # Popup: Neue Wartung hinzufügen
     if st.session_state.get("add_maintenance_popup", False):
         with st.form("maintenance_form"):
-            device = st.text_input("Gerät") #devices aus datenbank dropdown
-            date_performed = st.date_input("Datum der Wartung", value=date.today()) #start und enddatum eintragen
-            cost = st.number_input("Kosten (€)", min_value=0.0, step=0.01)
-            description = st.text_area("Beschreibung")
+            device = st.selectbox("Gerät", st.session_state.device_list)
+            start_date = st.date_input("Startdatum der Wartung", value=date.today())
+            end_date = st.date_input("Enddatum der Wartung", value=date.today())
+            interval_months = st.number_input("Intervall (Monate)", min_value=1, step=1)
+            cost = st.number_input("Kosten (€)", min_value=0, step=1)
+            description = st.text_input("Beschreibung")
+
             submit_button = st.form_submit_button("Hinzufügen")
             cancel_button = st.form_submit_button("Abbrechen")
 
             if submit_button:
-                if device and cost > 0 and description:
-                    new_entry = {
-                        "Gerät": device,
-                        "Datum": date_performed.strftime("%Y-%m-%d"),
-                        "Kosten (€)": cost,
-                        "Beschreibung": description,
-                    }
-                    st.session_state.maintenance_data = pd.concat(
-                        [
-                            st.session_state.maintenance_data,
-                            pd.DataFrame([new_entry]),
-                        ],
-                        ignore_index=True,
+                st.rerun()
+                try:
+                    maintenance_service.create_new_maintenance(
+                        device_id=device,
+                        start_date=datetime.combine(start_date, datetime.min.time()),
+                        end_date=datetime.combine(end_date, datetime.min.time()),
+                        interval_months=interval_months,
+                        cost=cost,
+                        description=description
                     )
                     st.success("Wartung erfolgreich hinzugefügt!")
                     st.session_state["add_maintenance_popup"] = False
                     st.rerun()
-                else:
-                    st.error("Alle Felder müssen korrekt ausgefüllt sein.")
+                except ValueError as e:
+                    st.error(f"Fehler: {e}")
+                    st.rerun()
+
             if cancel_button:
                 st.session_state["add_maintenance_popup"] = False
                 st.rerun()
-
 if __name__ == "__main__":
     run()
