@@ -1,10 +1,13 @@
+import os,sys
+sys.path.append(os.path.dirname(__file__)+"/../")
+
 import streamlit as st
 import pandas as pd
-from users import User
+from users_inheritance import User
 
 def run():
     if "user_data" not in st.session_state:
-        all_users = User.find_all(User)
+        all_users = User.find_all()
         user_data = [{ "Email": user.id, "Name": user.name} for user in all_users]
         st.session_state.user_data = pd.DataFrame(user_data)
 
