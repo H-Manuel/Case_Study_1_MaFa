@@ -1,5 +1,6 @@
-import os
-import sys
+
+import sys, os
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/../")
 from datetime import date, datetime
 import streamlit as st
 import pandas as pd
@@ -10,8 +11,6 @@ from tinydb import TinyDB
 from devices_inheritance import Device
 from maintenance_service import MaintenanceService
 
-# Initialize the database connector
-Serializable.db_connector = TinyDB('c:/Schule_24-25/Python_Schule/Case_Study/Case_Study_1_MaFa/src/database.json')
 
 def run():
     reservation_service = ReservationService()
